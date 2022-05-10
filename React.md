@@ -197,3 +197,324 @@ function App(){
 ### React Hook (React. 16.8)
 React Hook 을 이용하면 함수 컴포넌트 안에서도 스태이트를 가질 수 있고   
 라이프사이클 메소드도 사용 가능
+
+***
+## JSX
+Javascript 에서 문법적,구문적 확장을 한 것   
+사실 리엑트는 JSX 없이 JS 만으로 구현이 가능하지만   
+JS 익숙하지않은 다른 사람과의 협업 , 시각적인 보조 등으로 JSX가 유용하다   
+
+## Embedding Expressions 
+<pre>
+<code>
+const name = 'mason';
+const element = &lt;h1&gt;Hello, {name}&lt;/h1&gt;
+</code>
+</pre>
+<pre>
+<code>
+function formatName(user) {
+  return user.firstName + ' ' + user.lastName;
+}
+
+const user = {
+  firstName: 'Harper',
+  lastName: 'Perez'
+};
+
+const element = (
+  &lt;h1&gt;
+    Hello, {formatName(user)}!
+  &lt;/h1&gt;
+);
+</code>
+</pre>
+주의점   
+React 에서 render 함수나 function 함수에서 이 JSX를 리턴하게 되면   
+형제 노드를 쓸 수가 없다
+<pre>
+<code>
+function App() {
+  const name = 'mason';
+  return  &lt;h1&gt;Hello {name}:)  &lt;/h1&gt;
+       &lt;h1&gt;Hello&lt;/h1&gt;;
+}
+//Parsing error:
+//Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...&lt;/>?
+</code>
+</pre>
+그래서 JSX 는 다수의 태그를 리턴할 수 없기때문에   
+<React.Fragment>태그를 사용하거나 <> </>  사용해서 묶어줘야한다.
+<pre>
+<code>
+import React from "react";
+
+function App() {
+  const name = 'mason';
+  
+  return &lt;React.Fragment&gt;
+    &lt;h1&gt;Hello {name}:)&lt;/h1&gt;
+    &lt;h1&gt;Hello&lt;/h1&gt;
+  &lt;/React.Fragment&gt;;
+}
+</code>
+</pre>
+<pre>
+<code>
+import React from "react";
+
+function App() {
+  const name = 'mason';
+  
+  return &lt;&gt;
+    &lt;h1&gt;Hello {name}:)&lt;/h1&gt;
+    &lt;h1&gt;Hello&lt;/h1&gt;
+  &lt;/&gt;;
+}
+</code>
+</pre>
+또 JSX 안에서 자바스크립트 코드 작성 가능
+<pre>
+<code>
+function App() {
+  const name = 'mason';
+  
+  return &lt;&gt;
+    &lt;h1&gt;Hello&lt;/h1&gt;
+   {name && &lt;h1&gt;Hello {name}:)&lt;/h1&gt;}
+          {
+                ['apple','banana'].map(item => &lt;h1&gt;{item}&lt;/h1&gt;)
+            }
+  &lt;/&gt;;
+</code>
+</pre>
+[Introducing JSX](https://reactjs.org/docs/introducing-jsx.html)
+React.createElement(component, props, ...children)
+<pre>
+<code>
+const element = (
+  &lt;h1 className="greeting"&gt;
+    Hello, world!
+  &lt;/h1&gt;
+);
+// 동일
+const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);
+
+// 속성이 많을 때
+const element = {
+  type: 'h1',
+  props: {
+    className: 'greeting',
+    children: 'Hello, world!'
+  }
+};
+</code>
+</pre>
+### JSX 심화
+근본 적으로 JSX 는 React.createElement 함수에 syntactic sugar 를 제공하는 것이다   
+이런식으로 코드를 작성해도
+<pre>
+<code>
+const element = (
+  &lt;h1 className="greeting"&gt;
+    Hello, world!
+  &lt;/h1&gt;
+);
+</code>   
+</pre>
+실제로 컴파일은 React.createElement 함수를 통해서 이루어진다.
+<pre>
+<code>
+const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);
+</code>
+</pre>
+## React 요소 지정
+JSX 태그의 첫번째 문자로 리액트 요소의 타입인지를 결정한다   
+즉 대문자로 시작하는 JSX 태그는 리액트 컴포넌트를 참조함을 나타낸다.   
+그래서 컴파일할때 해당 변수명으로 직접 참조해서 컴파일하기때문에 만약   
+JSX 안에서 &lt;Foo/&gt; 표현식을 사용한다면  사용하는 스코프 내에 반드시 Foo 가 존재 해야한다.
+## React Must Be in Scope
+JSX 는  React.createElement 호출해서 컴파일 하기때문에    
+리액트 라이브러리가 반드시 JSX 코드 스코프에 존재해야한다.   
+   
+예를 들어 Javascript 에서 직접적으로 React 와 CustomButton 을 직접적으로 참조하지 않지만   
+코드 상에서 이 둘의 imports 는 필요하다
+<pre>
+<code>
+import React from 'react';
+import CustomButton from './CustomButton';
+
+function WarningButton() {
+  // return React.createElement(CustomButton, {color: 'red'}, null);
+  return &lt;CustomButton color="red" /&gt;;
+}
+</code>
+</pre>
+Javascript bundler 를 사용하지않고 &lt;script&gt; 테그를 이용해서 React 로드했다면   
+이미 React global scope에 포함되어 있다
+## Using Dot Notation
+JSX 에서 Dot Notation(.)을 이용해서 리액트 컴포넌트를 참조할 수 있다.
+<pre>
+<code>
+import React from 'react';
+
+const MyComponents = {
+  DatePicker: function DatePicker(props) {
+    return &lt;div&gt;Imagine a {props.color} datepicker here.&lt;/div&gt;
+  }
+}
+
+function BlueDatePicker() {
+  return &lt;MyComponents.DatePicker color="blue" /&gt;;
+}
+</code>
+</pre>
+### 사용자 정의 컴포넌트는 대문자로!
+태그가 소문자로 시작하면, 즉 이미 만들어져있는 컴포넌트를 참조한다   
+&lt;div&gt;,&lt;span&gt; 등과 같은 태그는 React.createElement 에 전달 될때   
+문자열 'div'와 'span' 으로 전달 된다.  React.createElement('div')   
+하지만 대문자로 시작하면 , &lt;Foo&gt; 는 컴파일시 React.createElement(Foo) 로   
+해당 태그 이름과 동일한 컴포넌트나 Javascript 파일을 참조하게 된다.   
+잘못된 예시
+<pre>
+<code>
+import React from 'react';
+
+// Wrong! 컴포넌트는 반드시 대문자로 시작
+function hello(props) {
+  // Correct! This use of &lt;div&gt; is legitimate because div is a valid HTML tag:
+  return &lt;div&gt;Hello {props.toWhat}&lt;/div&gt;;
+}
+
+function HelloWorld() {
+  // Wrong! 리엑트는 이 태그를 &lt;hello /&gt; HTML 태그로 생각함 
+  //왜냐하면 대문자가 아니기 때문에
+  return &lt;hello toWhat="World" /&gt;;
+}
+</code>
+</pre>
+<pre>
+<code>
+function Hello(props) {
+  return &lt;div&gt;Hello {props.toWhat}&lt;/div&gt;;
+}
+
+function HelloWorld() {
+  return &lt;Hello toWhat="World" /&gt;;
+}
+</code>
+</pre>
+## 동적으로 타입결정(props)
+해당 컴포넌트 속성에 따라 동적으로 표시할 수 있음
+<pre>
+<code>
+import React from 'react';
+import { PhotoStory, VideoStory } from './stories';
+
+const components = {
+  photo: PhotoStory,
+  video: VideoStory
+};
+
+function Story(props) {
+  // Correct! JSX type can be a capitalized variable.
+  const SpecificStory = components[props.storyType];
+  return &lt;SpecificStory story={props.story} /&gt;
+}
+</code>
+</pre>
+
+<pre>
+<code>
+const MyComponents = {
+    DatePicker: function DatePicker(props) {
+        return &lt;div&gt;Imagine a {props.name} datepicker here.&lt;/div&gt;;
+    }
+}
+function App() {
+    const name = 'mason';
+
+    return (
+        &lt;&gt;
+        &lt;h1&gt;Hello&lt;/h1&gt;
+            &lt;MyComponents.DatePicker color="blue" name="mason"/&gt;
+        &lt;/&gt;
+    );
+}
+</code>
+</pre>
+### 다양한 props 사용 방법
+1. JavaScript Expressions
+<pre>
+<code>
+&lt;MyComponent foo={1 + 2 + 3 + 4} /&gt;
+</code>
+결과 : 10 
+</pre>
+2. String Literals
+<pre>
+<code>
+&lt;MyComponent message="hello world" /&gt;
+&lt;MyComponent message={'hello world'} /&gt;
+
+&lt;MyComponent message="& lt; 3" /&gt;
+&lt;MyComponent message={'<3'} /&gt;
+
+</code>
+</pre>
+3.Props Default
+<pre>
+<code>
+// 아무 값도 넘기지 않으면 기본값으로 true 가 넘어간다.
+&lt;MyTextBox autocomplete /&gt;
+
+&lt;MyTextBox autocomplete={true} /&gt;
+</code>
+</pre>
+4.Spread Attributes
+<pre>
+<code>
+function App1() {
+  return &lt;Greeting firstName="Ben" lastName="Hector" /&gt;
+}
+
+function App2() {
+  const props = {firstName: 'Ben', lastName: 'Hector'};
+  return &lt;Greeting {...props} /&gt;;
+}
+</code>
+</pre>
+<pre>
+<code>
+const Button = props => {
+    const { kind, ...other } = props;
+    const className = kind === "primary" ? "PrimaryButton" : "SecondaryButton";
+    return &lt;button className={className} {...other} /&gt;
+};
+
+
+function App() {
+    const name = 'mason';
+
+    return (
+        &lt; &gt;
+            &lt;Button kind="primary" other="other" test="test" onClick={() =&gt; console.log("clicked!")}&gt;
+                Hello World!
+            &lt;/Button&gt;
+        &lt;/>
+    );
+}
+</code>
+결과 :  &lt;button class="PrimaryButton" other="other" test="test"&gt;Hello World!&lt;/button&gt;
+</pre>
+
+
+[JSX In Depth](https://reactjs.org/docs/jsx-in-depth.html)
