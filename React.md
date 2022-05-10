@@ -518,3 +518,7 @@ function App() {
 
 
 [JSX In Depth](https://reactjs.org/docs/jsx-in-depth.html)
+
+***
+### 기타   
+1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
