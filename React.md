@@ -412,8 +412,39 @@ function HelloWorld() {
 }
 </code>
 </pre>
-## 동적으로 타입결정(props)
-해당 컴포넌트 속성에 따라 동적으로 표시할 수 있음
+##State
+컴포넌트 안에서 우리가 정의한 컴포넌트의 state 오브젝트 입니다.   
+컴포넌트 UI를 위한 데이터를 보관하는 오브젝트로   
+이 state라는 오브젝트를 통해서 데이터에 업데이트가 발생하면  
+리액트가 자동적으로 우리가 구현한 render 함수를 호출
+<pre>
+<code>
+import React from 'react';
+
+class LikeButton extends Component {
+ state = {
+  numberOfLikes: 0,
+ }; // state
+ render(){
+  return &lt;button&gt;
+   {this.sate.numberOfLikes}
+   &lt;button/&gt;
+ };
+}
+</code>
+</pre>
+
+## Props
+해당 컴포넌트 속성에 따라 동적으로 표시할 수 있음   
+컴포넌트 밖에서 주어지는 데이터 입니다.   
+컴포넌트 안에서 자체적으로 데이터를 정의해서 사용하는 State와는 다르게,   
+Props은 컴포넌트 외부에서 데이터를 제공받습니다.   
+가장 근본적인 이유는 컴포넌트의 재사용을 높이기 위해이다.   
+상황에 따라 주어진 데이터를 받아서 그 데이터에 맞게 UI를 보여주기 위해서 사용 되어져요.   
+아래처럼 부모컴포넌트에서 이렇게 LikeButton 컴포넌트를 사용할때    
+title, onClick과 같은 아이들을 인자로 전달해 주면 이 아이들이 props 오브젝트로 묶여서 LikeButton 컴포넌트에 전달되어집니다.
+
+
 <pre>
 <code>
 import React from 'react';
@@ -446,6 +477,7 @@ function App() {
         &lt;&gt;
         &lt;h1&gt;Hello&lt;/h1&gt;
             &lt;MyComponents.DatePicker color="blue" name="mason"/&gt;
+                                   //color , name -> props
         &lt;/&gt;
     );
 }
