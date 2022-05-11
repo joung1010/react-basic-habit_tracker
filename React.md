@@ -445,6 +445,35 @@ Props은 컴포넌트 외부에서 데이터를 제공받습니다.
 title, onClick과 같은 아이들을 인자로 전달해 주면 이 아이들이 props 오브젝트로 묶여서 LikeButton 컴포넌트에 전달되어집니다.
 
 
+class
+<pre>
+<code>
+class App extends Component{
+ handleClick = event => {
+  console.log(event);
+ }
+ render(){
+  return &lt;LikeButton title={'Lke'} onClick={this.handleClick} /&gt;;
+ }
+}
+
+
+class LikeButton extends Component {
+ state = {
+  numberOfLikes: 0,
+ }; // state
+ render(){
+  return &lt;button&gt;
+   console.log(this.props); // title : "Like"
+   console.log(this.state); // 0 
+   {this.sate.numberOfLikes}
+   &lt;button/&gt;
+ };
+}
+</code>
+</pre>
+
+함수
 <pre>
 <code>
 import React from 'react';
