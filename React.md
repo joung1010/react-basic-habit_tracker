@@ -636,5 +636,17 @@ preventDefault 를 이용해야 된다.
 **SyntheticEvent**: 브라우저에서 사용하는 event 객체를 한번더 감싼 이벤트 객체   
 [SyntheticEvent 공식문서](https://reactjs.org/docs/events.html)
 ***
+##List and Key
+릭에트 에서는 자식 컴포넌트가 있다면 고유한 key 값을 가지고 있어야한다.   
+즉 각각의 컴포넌트에 고유학 아이디를 부여함으로써 리액트가 불필요한 렌더링을 하지 않는다던지   
+조금 성능을 아이디를 이용해서 계산을 한다.   
+즉 나중에 다른 자식 요소가 추가 되거나 위치가 변경이되어도 아이디가 동일하다면 불필요하게 렌더링을   
+하지않는다.   
+-> 리액트는 키를 이용해서 어떤 아이템이 추가, 변경, 삭제 되었는지 구분하기 때문에 안전성과 선을 위해   
+여러 List 형태의 자식요로가 있을때 반드시 추가하는 것이 좋다. 이때 key 값은 고유한 값이어야한다.   
+[Lists and Keys 공식문서](https://reactjs.org/docs/lists-and-keys.html)
+
+
+***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
