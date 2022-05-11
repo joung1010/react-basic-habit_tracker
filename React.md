@@ -581,5 +581,60 @@ function App() {
 [JSX In Depth](https://reactjs.org/docs/jsx-in-depth.html)
 
 ***
+## Handling Events
+DOM 요소의 이벤트 핸들링과 유사   
+문법적 차이만 있음   
+1. React의 이벤트는 소문자 대신 캐멀 케이스 사용
+2. JSX를 사용하여 문자열이 아닌 함수로 이벤트 핸들러를 전달   
+   
+기존 HTML
+<pre>
+<code>
+&lt;button onclick="activateLasers()"&gt;
+  Activate Lasers
+&lt;/button&gt;
+</code>
+</pre>
+React
+<pre>
+<code>
+&lt;button onClick={activateLasers}&gt; //onClick 캐멀 케이스, activateLasers함수를 그대로 전달
+  Activate Lasers
+&lt;/button&gt;
+</code>
+</pre>
+3. React 에서는 return false를 했다고 해서 기본적으로 작동하는 동작을 막을 수 없다.   
+반드시 preventDefault 함수를 호출해 줘야한다.   
+
+<pre>
+<code>
+&lt;form onsubmit="console.log('You clicked submit.'); return false"&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+</code>
+return false 때문에 submit event가 작동 하지않음
+</pre>
+React 에서는
+<pre>
+<code>
+function Form() {
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log('You clicked submit.');
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+</code>
+preventDefault 를 이용해야 된다.
+</pre>
+여기서 handleSubmit 함수에 인자로 전달되는 e(event) 는 SyntheticEvent   
+**SyntheticEvent**: 브라우저에서 사용하는 event 객체를 한번더 감싼 이벤트 객체   
+[SyntheticEvent 공식문서](https://reactjs.org/docs/events.html)
+***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
