@@ -60,7 +60,7 @@ class App extends Component{
         return (
             <>
             <Navbar
-            callCount={this.getTotalCount}
+            totalCount={this.state.habits.filter(item => item.count>0).length}
             />
             <Habits
                 habits={this.state.habits}

@@ -4,11 +4,11 @@ class Navbar extends Component {
 
     render() {
         return (
-            <section className="navbar">
+            <nav className="navbar">
                <span className="navbar-logo"> <i className='fas fa-leaf'></i> </span>
                 <span>Habit Tracker</span>
-                <span className="navbar-count">{this.props.callCount()}</span>
-            </section>
+                <span className="navbar-count">{this.props.totalCount}</span>
+            </nav>
         );
     }
 }
