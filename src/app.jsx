@@ -41,9 +41,8 @@ class App extends Component{
         return totalCount;
     };
 
-    handleSubmit = (habit) =>{
-        const habits = [...this.state.habits];
-        habits.push(habit);
+    handleSubmit = (name) =>{
+        const habits = [...this.state.habits,{id:Date.now(),name,count:0}];
         this.setState({habits});
     };
 
