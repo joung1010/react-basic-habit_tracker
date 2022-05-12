@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
-class AddHabit extends Component {
+class AddHabit extends PureComponent {
     inputRef = React.createRef();
     formRef =React.createRef();
     //React는 바로 DOM 요소에 접근하지 않고
@@ -16,6 +16,7 @@ class AddHabit extends Component {
     };
 
     render() {
+        console.log('addHabit');
         return (
             <form ref={this.formRef} onSubmit={this.handleSubmit}>
                 <input ref={this.inputRef} type="text" className="add-input" placeholder="Habit"/>

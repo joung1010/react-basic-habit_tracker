@@ -686,5 +686,47 @@ const node = this.myRef.current;
 
 [Ref 공식문서](https://reactjs.org/docs/refs-and-the-dom.html)
 ***
+## PureComponent
+PureComponent 는 React 의 Component 와 비슷하다   
+다른점은 React.Component 은 shouldComponentUpdate() 구현하지 않았지만   
+React.PureComponent shouldComponentUpdate()구현 했다   
+   
+shouldComponentUpdate 함수는 Conponent를 업데이트 해야 될지 안 해야 될지   
+물어보는 함수인데 (prop 과 state를 가볍게 비교한다)   
+--> 이전의 prop 과 state 와 지금의 prop 과 state 를 비교해서   
+같다면 false를 return 하고 다르다면 true 를 return 한다. 
+   
+이떄 shallow Comparison을 하는데 이말은 이 오브젝트의 reference를 비교한다는 뜻   
+즉 오브젝트의 내부 데이터가 어떻게 변경 되는 건 상관하지 않고 동일한 레퍼런스를   
+가지고 있는 오브젝트라면 무조건 false 가 된다. 
+   
+두개의 변수(states)가 동일한 오브젝트를 가리키고 있는 경우
+<pre>
+<code>
+const mason1 = { name: 'mason' };
+
+const mason2 = mason1;
+</code>
+</pre>
+1. mason1 === mason2 => ture 
+2. ShouldComponentUpdate => false   
+   
+두개의 참조값이 같으므로, 업데이트 할 필요가 없어서 ShouldComponentUpdate 함수는 false를 리턴   
+
+두개의 변수(states)가 다른 오브젝트를 가리키고 있는 경우:   
+(이때, 동일한 값을 가지고 있더라도, 두개는 엄연히 다른 오브젝트이므로 다른 참조값을 가지게 됨)   
+<pre>
+<code>
+const mason1 = { name: 'mason' };
+
+const mason2 =  { name: 'mason' };
+</code>
+</pre>
+1. mason1 === mason2 => false
+2. ShouldComponentUpdate => true   
+
+두개의 참조값이 다르므로, 업데이트가 필요함! ShouldComponentUpdate 함수는 true를 리턴   
+
+***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
