@@ -646,7 +646,45 @@ preventDefault 를 이용해야 된다.
 여러 List 형태의 자식요로가 있을때 반드시 추가하는 것이 좋다. 이때 key 값은 고유한 값이어야한다.   
 [Lists and Keys 공식문서](https://reactjs.org/docs/lists-and-keys.html)
 
+***
+## React Refs
+Refs 는 DOM 노드에 접근 하거나 render method 를 통해 만들어진 React Elements 에 접근하는 방법이다.   
+   
+일반적인 리엑트 데이터 흐름에서 부모요소가 자식요소와 상호작용할 수 있는 방법은 props를 이용하는 것이다.   
+그래서 자식요소를 수정하기 위해서는 새로은 props 와 함께 새롭게 다시 render 해야한다.   
+근데 몇몇 케이스에서 부득이하게 이 일반적인 데이터흐름 말고 자식요소를 변경해야할 떄가 있다.   
+이 변경된 자식요소는 React Component 일 수도 DOM element 일 수도 있다.   
 
+### Refs 사용할때
+1. 포커스, 텍스트 선택 영역, 미디어 플레이를 관리할때
+2. 애니메이션 직접 실행할때
+3. DOM 라이브러리에 접근할때   
+   
+## Creating Refs
+React.createRef()함수 사용후 해당 요소에 ref 속성으로 연결   
+<pre>
+<code>
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
+  }
+  render() {
+    return &lt;div ref={this.myRef} /&gt;;
+  }
+}
+
+</code>
+</pre>
+## Accessing Refs
+생성된 Ref 에서 **current** 속성을 통해 해당 노드를 참조한다.
+<pre>
+<code>
+const node = this.myRef.current;
+</code>
+</pre>
+
+[Ref 공식문서](https://reactjs.org/docs/refs-and-the-dom.html)
 ***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
