@@ -12,17 +12,17 @@ class Habits extends Component {
                     onAddHabit={this.props.onAddHabit}
                     lastId={this.props.habits[this.props.habits.length - 1]}
                 />
-            <ul>
-                {this.props.habits.map(habit =>
-                    (<Habit key={habit.id}
-                            habit={habit}
-                            onIncrement={this.props.onIncrement}
-                            onDecrement={this.props.onDecrement}
-                            onDelete={this.props.onDelete}
-                    />)
-                )}
-            </ul>
-                <HabitReset onResetHabit={this.props.onResetHabit}/>
+                <ul>
+                    {this.props.habits.map(habit =>
+                        (<Habit key={habit.id}
+                                habit={habit}
+                                onIncrement={this.props.onIncrement}
+                                onDecrement={this.props.onDecrement}
+                                onDelete={this.props.onDelete}
+                        />)
+                    )}
+                </ul>
+                <button className="habits-reset" onClick={this.props.onResetHabit}>Reset All</button>
             </section>
         );
     }
