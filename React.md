@@ -737,9 +737,79 @@ Component 클래스를 상속하면 라이프 사이클 메소드를 이용할 �
 3. componentDidUpdate : 컴포넌트가 업데이트 되었을때
 4. componentWillUnmount : 컴포넌트가 사라질때    
    
+***
+## React Hook
+함수에서 state 와 라이프 사이클 함수를 사용할 수 있다.
+<pre>
+<code>
+const SimpleHabit = (props) => {
+    // state = {
+    //     count: 0,
+    // };
+    const [count, setCount] = useState(0);
 
+    const handleIncrement = () => {
+        setCount(  count + 1 );
+    };
 
+    return (
+        &lt;li className="habit"&gt;
+            &lt;span className="habit-name"&gt;Reading&lt;/span&gt;
+            &lt;span className="habit-count"&gt;{count}&lt;/span&gt;
+            &lt;button
+                className="habit-button habit-increase"
+                onClick={handleIncrement}
+            &gt;
+                &lt;i className="fas fa-plus-square"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/li&gt;
+    );
+};
+</code>
+</pre>
+여기서 한가지 포인트!   
+클래스는 한번 만들어지면 클래스 안에있는 멤버 변수들은 만들어질 때 **딱 한번**만 만들어진다.   
+대신에 stae , props 가 업데이트 되면 render 함수만 반복적으로 호출   
+   
+함수는 컴포넌트가 변경이 되면 함수 코드블럭 자체가 반복해서 호출이 된다.   
+그래서 함수 안에있는 지역변수들 도 뮤한정 반복된다.   
+그러면 useState(0) 으로 계속 업데이트 되어야하는데 안그럴까????   
+->useState 는 리엑트 훅의 API 중 하나로 이 useState 사용하면 리액트가 알아서 자동으로 기억해준다.   
+즉 아무리 많이 호출되도 이 컴포넌트에 연결된 state 는 따로 저장이 되어져 있어서  
+계속 동일한 값을 받아온다.   
+   
+useRef : CreateRef 처럼 호출될때마다 새로운 레퍼런스를 만드는 것이 아니라   
+한 번만 만들어서 메모리에 저장하고 다시 그것을 재사용   
 
+useCallback : 리엑트가 캐시를 해서 즉 특정 해당가 반복적으로 호출이 되어도   
+동일한 콜백함수를 전달
+<pre>
+<code>
+const SimpleHabit = (props) => {
+    const [count, setCount] = useState(0);
+    const spanRef = useRef();
+
+    const handleIncrement = useCallback(() => {
+        setCount(  count + 1 );
+    });
+
+    return (
+        &lt;li className="habit"&gt;
+            &lt;span ref={spanRef} className="habit-name"&gt;Reading&lt;/span&gt;
+            &lt;span className="habit-count"&gt;{count}&lt;/span&gt;
+            &lt;button
+                className="habit-button habit-increase"
+                onClick={handleIncrement}
+            &gt;
+                &lt;i className="fas fa-plus-square"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/li&gt;
+    );
+};
+</code>
+</pre>
+
+[React Hooks](https://reactjs.org/docs/hooks-intro.html)
 ***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
