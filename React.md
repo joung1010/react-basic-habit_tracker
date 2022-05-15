@@ -857,5 +857,161 @@ const SimpleHabit = (props) => {
 
 [React Hooks](https://reactjs.org/docs/hooks-intro.html)
 ***
+## React 동작 원리   
+리액트는 변경사항이 한가지 방향으로만 흘러간다.
+>데이터가 변경이 되면 -> UI가 업데이트 된다.
+   
+위 문장을 풀어서 말하자면
+>데이터(State)가 변경이 되면 리액트가 render() 함수를 호출해서 UI가 업데이트 된다.   
+   
+<pre>
+<code>
+class App extends Component {
+ state = {
+  count : 0,
+ };
+ render () {
+  return (
+   &lt;&gt;
+   &lt;span&gt;{this.state.count}&lt;/span&gt;
+   &lt;button
+      onClick={()=>{
+      this.state.count++;      
+     }}
+    &gt;
+     Click
+    &lt;/button&gt;
+   &lt;/&gt;
+  )
+ }
+}
+</code>
+</pre>
+위와 같이 **this.state.count++** 를 이용해서 바로 this.state 값을 증가시켜주면   
+제대로 값이 증가 되지 않는다.   
+리액트에서 제대로 상태를 업데이트 하기 위해서는 리액트에서 제공하는 **setState** 함수를 호출해야 한다.   
+   
+<pre>
+<code>
+class App extends Component {
+ state = {
+  count : 0,
+ };
+ render () {
+  return (
+   &lt;&gt;
+   &lt;span&gt;{this.state.count}&lt;/span&gt;
+   &lt;button
+      onClick={()=>{
+      this.setState({count: this.state.count + 1}); 
+     }}
+    &gt;
+     Click
+    &lt;/button&gt;
+   &lt;/&gt;
+  )
+ }
+}
+</code>
+</pre>
+위의 코드를 보시면 setState 함수를 이용해서   
+새로운 상태 오브젝트(업데이트 하고자 하는 상태 데이터)를 인자로 전달해 주는것을 볼 수 있다.   
+리액트가 업데이트가 되어야 한다고 알아 차리게 하기 위해서는 이렇게 setState 함수를 호출해 해야 한다.   
+-> 그래야 상태가 업데이트가 되었다고 알고 UI를 업데이트하기 위해서 render()함수를 호출해준다.
+   
+리액트는 내부적으로 setState 함수가 호출이 되면 이제 리액트는 **현재 컴포넌트가 가지고 있는 상태**와 (this.state),   
+**업데이트 해야 하는 새로운 상태** (setState 함수의 인자로 전달된 새로운 오브젝트) 두가지를 비교해서   
+**업데이트가 필요한 경우** 해당 컴포넌트의 render 함수를 호출 해준다.   
+
+컴포넌트를 업데이트 할때 현재 컴포넌트의 상태와 새로운 상태를 비교하는 방식은   
+**PureComponent**인 경우에는 두가지를 얉게 비교 해서 (제일 상위 reference만 비교, shallow comparisons),   
+달라진게 있다면 컴포넌트를 업데이트   
+
+**일반 Component** 경에는 따로 라이프 싸이클 메소드중 하나인 shouldComponentUpdate를 구현하지 않았다면   
+setState가 호출 될때마다 무조건 render 함수가 호출된다.   
+
+**setState는 비동기 API**   
+webAPIs 중 하나인 setTimeout, setInterval과 같은 비동기 함수처럼, setState도 비동기 함수   
+그말은 setState를 호출한다고 해서 무조건 바로 render 함수가 호출되는 것이 아니라,  
+리액트에 업데이트 요청을 하기만 하고 다시 뒤에 이어지는 코드가 실행   
+
+비동기로 동작하기 때문에 리액트가 동시 다발적으로 요청된 여러가지의 setState를 더 효율적으로 처리 할 수 있다   
+>  그리고, state를 업데이트 할때 이전 state 값에서 무언가가 계산이 되어지는 경우라면
+> 컴포넌트 내의 state 값에 의존해서 계산한 값을 setState(updated)로 설정하기 보다는, setState(prevState => newState) 
+> 이렇게 이전 state 값을 받아서 그걸로 업데이트 되는 state값을 만드는 arrow 함수를 전달할 수 있는 함수 호출을 하시는게 좋다
+   
+**리액트에서 제공하는 setState는 함수는 두가지 종류**   
+1. setState(newState)  -> 새로운 state 오브젝트를 인자로 바로 받는 함수
+2. setState(prevState => { return newState; }) -> 이전 state를 받아서 그걸로 계산해서 새로운 state를 리턴하는 함수를 인자로 받는 함수
+   >this.setState((state, props) => ({
+   counter: state.counter + props.increment
+   }));
+   
+   
+이전 코드 수정
+<pre>
+<code>
+ &lt;button
+      onClick={()=>{
+      this.setState(state => ({count : state.count + 1,})); 
+     }}
+    &gt;
+     Click
+    &lt;/button&gt;
+</code>
+</pre>
+[관련 공식 문서](https://reactjs.org/docs/state-and-lifecycle.html)   
+   
+### State를 수정하면 안되는 이유?
+리액트에서 state를 직접적으로 수정하면 좋지 않다.   
+사실 어떤 프로그래밍에서도 오브젝트를 직접적으로 변경하는것은 좋지 않다.   
+예상치 못한 오류가 발생하는 것을 피하기 위해서는   
+이미 만들어진 오브젝트는 항상 불변성을 (Immutability) 유지 하는것이 좋다   
+안되는 이유!!
+<pre>
+<code>
+class App extends Component {
+ state = {
+  count : 0,
+ };
+ render () {
+  return (
+   &lt;&gt;
+   &lt;span&gt;{this.state.count}&lt;/span&gt;
+   &lt;button
+      onClick={()=>{
+      **this.state.count++;      
+      this.setState(this.state);**
+     }}
+    &gt;
+     Click
+    &lt;/button&gt;
+   &lt;/&gt;
+  )
+ }
+}
+</code>
+</pre>
+this.state가 가리키고 있는 오브젝트의 count를 바로 직접적으로 수정하고, 수정된 this.state 자체를 setState의 인자로 전달   
+실행 시켜보면 잘 동작하는 것을 확인할 수 있다.   
+그려면 이렇게나 잘되는데, 아니 왜 도대체 state를 바로 수정하지 말라고 하는거죠? 왜 매번 귀찮게 새로운 오브젝트를 만들어야 할까???    
+그렇게 하기 위해서 작성해야 하는 코드의 양도 많아 지고 정말 귀찮은데   
+
+이렇게 State를 직접적으로 수정하는게 좋지 않은 이유   
+1. setState는 비동기적으로 동작한다   
+   그래서 State를 직접 수정하면서 여러번 상태를 업데이트 하는 경우 이전 업데이트 내용이 다음 업데이트 내용으로 덮어 쓰여질 수 있고   
+   비동기 특성으로 인해 예상치 못한 곳에서, 예상치 못한 순간에  버그가 발생 할 수 있는 위험이 있다.
+2. PureComponent에서 정상적으로 동작 하지 않는다   
+   PureComponent는 현재 컴포넌트가 가지고 있는 상태와 (this.state),   
+업데이트 해야 하는 새로운 상태 (setState 함수의 인자로 전달된 새로운 오브젝트)의 레퍼런스를 비교해서    
+업데이트가 필요한 경우 해당 컴포넌트의 render 함수를 호출
+
+지금 경우는 this.stae 오브젝트를 직접적으로 수정해서 setState함수에 동일한 오브젝트를 전달하니깐,   
+비교 해야 하는 대상의 레퍼런스가 동일하므로 리액트는 업데이트 할 필요가 없다고 판단해서 render 함수를 호출해 주지 않는다.   
+
+이처럼, 리액트 상태 State를 직접적으로 수정하는것은 예상치 못한 문제가 발생 할 수 있기 때문에, 꼭 불변성을 유지 하는것이 좋다.
+
+***
+
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
