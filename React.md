@@ -728,5 +728,18 @@ const mason2 =  { name: 'mason' };
 두개의 참조값이 다르므로, 업데이트가 필요함! ShouldComponentUpdate 함수는 true를 리턴   
 
 ***
+
+## Life Cycle Method
+컴퍼넌트가 생성, 제거 등 해당 라이프사이클에 맞추어 필요한 함수를 호출할 수 있다.   
+Component 클래스를 상속하면 라이프 사이클 메소드를 이용할 수 있다.   
+1. componentDidCatch: 컴포넌트가 어떤 에러 같은 것을 캐피 했을때
+2. componentDidMount : 컴포넌트가 등록 되었을 때(UI 상에 등록 되었을때, 사용자에게 보여질때)
+3. componentDidUpdate : 컴포넌트가 업데이트 되었을때
+4. componentWillUnmount : 컴포넌트가 사라질때    
+   
+
+
+
+***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
