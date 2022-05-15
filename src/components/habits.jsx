@@ -1,32 +1,32 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Habit from "./habit";
 import AddHabit from "./addHabit";
-import HabitReset from "./habitReset";
 
-class Habits extends Component {
-
-    render() {
-        console.log('habits')
-        return (
-            <section className="habits">
-                <AddHabit
-                    onAddHabit={this.props.onAddHabit}
-                    lastId={this.props.habits[this.props.habits.length - 1]}
-                />
-                <ul>
-                    {this.props.habits.map(habit =>
-                        (<Habit key={habit.id}
-                                habit={habit}
-                                onIncrement={this.props.onIncrement}
-                                onDecrement={this.props.onDecrement}
-                                onDelete={this.props.onDelete}
-                        />)
-                    )}
-                </ul>
-                <button className="habits-reset" onClick={this.props.onResetHabit}>Reset All</button>
-            </section>
-        );
-    }
-}
+const Habits = ({
+                    habits,
+                    onIncrement,
+                    onDecrement,
+                    onDelete,
+                    onAddHabit,
+                    onReset
+                }) => (
+    <section className="habits">
+        <AddHabit
+            onAddHabit={onAddHabit}
+        />
+        <ul>
+            {habits.map(habit =>
+                (<Habit key={habit.id}
+                        habit={habit}
+                        onIncrement={onIncrement}
+                        onDecrement={onDecrement}
+                        onDelete={onDelete}
+                />)
+            )}
+        </ul>
+        <button className="habits-reset" onClick={onReset}>Reset All</button>
+    </section>
+);
 
 export default Habits;
+
