@@ -1012,6 +1012,10 @@ this.state가 가리키고 있는 오브젝트의 count를 바로 직접적으�
 이처럼, 리액트 상태 State를 직접적으로 수정하는것은 예상치 못한 문제가 발생 할 수 있기 때문에, 꼭 불변성을 유지 하는것이 좋다.
 
 ***
+## Deployment
+1. githubPage
+   [Deployment](https://create-react-app.dev/docs/deployment) 참고
 
+***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
