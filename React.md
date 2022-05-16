@@ -1022,6 +1022,72 @@ this.state가 가리키고 있는 오브젝트의 count를 바로 직접적으�
 >  publish directory 는 build 폴더 선택    
 >  최종 완료되면 netlify deploy --prod 배포
 
+*** 
+## PostCSS
+CSS 전처리기   
+기본적인 CSS만으로는 중복적으로 작성해야 되는 CSS 코드나 다른 브라우저 호환성을 위해서   
+반복적으로 해줘야하는 작업들이 많다.   
+이런 반복적인, 중복되는 코드 작성을 최소화하고자 CSS 전처리기가 나왔다.   
+ex) LESS, SASS .....   
+[PostCSS](https://postcss.org/)
+
+[PostCSS Plugins](https://www.postcss.parts/)
+
+[Plugins Github 페이지](https://github.com/postcss/postcss/blob/master/docs/plugins.md)
+
+<pre>
+<code>
+button1.module.css
+{
+ .button{
+  background-color: sandybrown;
+ }
+ .text{
+  color: black;
+ }
+}
+
+button2.module.css
+{
+ .button{
+  background-color: blue;
+ }
+ .text{
+  color: white;
+ }
+}
+</code>
+</pre>
+
+<pre>
+<code>
+import React,{Component} from 'react';
+import styles from './button1.button2.module.css'
+
+class Button1 extends Component {
+ render () {
+  return (
+   &lt;div className="{styles.button}" &gt;
+    &lt;span className="{styles.text}"&gt;Button1 &lt;/span&gt;
+   &lt;/div&gt;
+  )
+ }
+}// 색 sandybrown
+
+class Button1 extends Component {
+ render () {
+  return (
+   &lt;div className="{styles.button}" &gt;
+    &lt;span className="{styles.text}" &gt;Button2 &lt;/span&gt;
+   &lt;/div&gt;
+  )
+ }
+}//blue
+</code>
+</pre>
+
+
+
 ***
 ### 기타   
 1.폰트오쏨 명령어: yarn add @fortawesome/fontawesome-free
