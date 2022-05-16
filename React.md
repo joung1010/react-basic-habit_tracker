@@ -1015,6 +1015,12 @@ this.state가 가리키고 있는 오브젝트의 count를 바로 직접적으�
 ## Deployment
 1. githubPage
    [Deployment](https://create-react-app.dev/docs/deployment) 참고
+2. Netlify
+> npm install netlify-cli -g   
+>  netlify deploy   
+>  Create & configure a new site 선택후 siteName 정하고 
+>  publish directory 는 build 폴더 선택    
+>  최종 완료되면 netlify deploy --prod 배포
 
 ***
 ### 기타   
